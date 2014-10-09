@@ -1,296 +1,225 @@
 package students.logic;
 
 
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeSet;
 
 
 public class ManagementSystem {
 
-	private List<Group> groups;
-	private Collection<Student> students;
-	
+	private static Connection con;
 	private static ManagementSystem instance;
+
 	
-	private ManagementSystem() {
-		loadGroups();
-		loadStudents();
+	private ManagementSystem() throws Exception {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://localhost:3306/students";
+			con = DriverManager.getConnection(url, "root", "rootpassword");
+		} catch(ClassNotFoundException e) {
+			throw new Exception(e);
+		} catch(SQLException e) {
+			throw new Exception(e);		
+		}
 	}
 	
-	public static synchronized ManagementSystem getInstance() {
+	public static synchronized ManagementSystem getInstance() 
+			throws Exception {
 		if(instance == null) {
 			instance = new ManagementSystem();
 		}
 		return instance;
 	}
-/*	
-	public static void main(String[] args) {
+
+	
+	public List<Group> getGroups() throws SQLException {
+		List<Group> groups = new ArrayList<Group>();
+		Statement st = null;
+		ResultSet rs = null;
 		try {
-			System.setOut(new PrintStream("out.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		ManagementSystem ms = ManagementSystem.getInstance();
-		printGroups(ms);
-		printAllStudents(ms);
-		printStudentsByGroups(ms);
-		
-		Student student = new Student();
-		student.setId(5);
-		student.setName("Игорь");
-		student.setPatronymic("Владимирович");
-		student.setSurname("Перебежкин");
-		student.setSex('М');
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(1991, 8, 31);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(1);
-		student.setEducationYear(2006);
-		printString("Добавление студента: " + student);
-		printString("-----------");
-		ms.insertStudent(student);
-		printAllStudents(ms);
-		
-		student = new Student();
-		student.setId(5);
-		student.setName("Игорь");
-		student.setPatronymic("Владимирович");
-		student.setSurname("Новоеребежкин");
-		student.setSex('М');
-		calendar = Calendar.getInstance();
-		calendar.set(1991, 8, 31);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(1);
-		student.setEducationYear(2006);
-		printString("Редактирование данных студента: " + student);
-		printString("-----------");
-		ms.updateStudent(student);
-		printAllStudents(ms);
-		
-		printString("Удаление студента: " + student);
-		printString("-----------");
-		ms.deleteStudent(student);
-		printAllStudents(ms);
-		
-		Group group1 = ms.getGroups().get(0);
-		Group group2 = ms.getGroups().get(1);
-		printString("Перевод студентов из 1-ой группы во 2-ю группу");
-		printString("-----------");
-		ms.moveStudentsToGroup(group1, 2006, group2, 2007);
-		printAllStudents(ms);
-		
-		printString("Удаление студентов из группы: " + group2 + " в 2006 году");
-		printString("-----------");
-		ms.removeStudentsFromGroup(group2, 2006);
-		printAllStudents(ms);
-	}
-*/	
-	public void loadGroups() {
-		if(groups == null) {
-			groups = new ArrayList<Group>();
-		} else {
-			groups.clear();
-		}
-		Group group = null;
-		
-		group = new Group();
-		group.setId(1);
-		group.setName("Первая");
-		group.setCurator("Доктор Борменталь");
-		group.setSpeciality("Создание собачек из человеков");
-		groups.add(group);
-		
-		group = new Group();
-		group.setId(2);
-		group.setName("Вторая");
-		group.setCurator("Профессор Преображенский");
-		group.setSpeciality("Создание человеков из собачек");
-		groups.add(group);
-		
-	}
-	
-	public void loadStudents() {
-		if(students == null) {
-			students = new TreeSet<Student>();
-		} else {
-			students.clear();
-		}
-		
-		Student student = null;
-		Calendar calendar = Calendar.getInstance();
-		
-		student = new Student();
-		student.setId(1);
-		student.setName("Иван");
-		student.setPatronymic("Сергеевич");
-		student.setSurname("Степанов");
-		student.setSex('М');
-		calendar.set(1990, 3, 20);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(2);
-		student.setEducationYear(2006);
-		students.add(student);
-		
-		student = new Student();
-		student.setId(2);
-		student.setName("Наталья");
-		student.setPatronymic("Андреевна");
-		student.setSurname("Чичикова");
-		student.setSex('Ж');
-		calendar.set(1990, 6, 10);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(2);
-		student.setEducationYear(2006);
-		students.add(student);
-		
-		student = new Student();
-		student.setId(3);
-		student.setName("Петр");
-		student.setPatronymic("Викторович");
-		student.setSurname("Сушкин");
-		student.setSex('М');
-		calendar.set(1991, 3, 12);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(1);
-		student.setEducationYear(2006);
-		students.add(student);
-
-		student = new Student();
-		student.setId(4);
-		student.setName("Вероника");
-		student.setPatronymic("Сергеевна");
-		student.setSurname("Ковалева");
-		student.setSex('Ж');
-		calendar.set(1991, 7, 19);
-		student.setBirthDate(calendar.getTime());
-		student.setGroupId(1);
-		student.setEducationYear(2006);
-		students.add(student);
-	}
-
-	public static void printGroups(ManagementSystem ms) {
-		printString("Полный список групп");
-		printString("-----------");
-		List<Group> allGroups = ms.getGroups();
-		for(Group group : allGroups) {
-			printString(group);
-		}
-		printString();
-	}
-	
-	public static void printAllStudents(ManagementSystem ms) {
-		printString("Полный список студентов");
-		printString("-----------");
-		Collection<Student> allStudents = ms.getAllStudents();
-		for(Student student : allStudents) {
-			printString(student);
-		}
-		printString();
-	}
-	
-	public static void printStudentsByGroups(ManagementSystem ms) {
-		printString("Список студентов по группам");
-		printString("-----------");
-		List<Group> groups = ms.getGroups();
-		for(Group group : groups) {
-			printString("---> Группа: " + group.getName());
-			Collection<Student> groupStudents 
-					= ms.getStudentsFromGroup(group, 2006);
-			for(Student student : groupStudents) {
-				printString(student);
+			st = con.createStatement();
+			rs = st.executeQuery("select group_id, groupName, curator, " + 
+					" speciality from groups");
+			while(rs.next()) {
+				Group group = new Group();
+				group.setId(rs.getInt(1));
+				group.setName(rs.getString(2));
+				group.setCurator(rs.getString(3));
+				group.setSpeciality(rs.getString(4));
+				groups.add(group);
+			}
+		} finally {
+			if(rs != null) {
+				rs.close();
+			}
+			if(st != null) {
+				st.close();
 			}
 		}
-	}
-	
-	public List<Group> getGroups() {
 		return groups;
 	}
-	
-	public Collection<Student> getAllStudents() {
+
+	public Collection<Student> getAllStudents() throws SQLException {
+		Collection<Student> students = new ArrayList<Student>();
+		Statement st = null;
+		ResultSet rs = null;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery("select student_id, firstName, patronymic, " + 
+					" surName, sex, dateOfBirth, group_id, educationYear " + 
+					" from students order by surName, firstName, patronymic");
+			while(rs.next()) {
+				Student student = new Student(rs);
+				students.add(student);
+			}
+		} finally {
+			if(rs != null) {
+				rs.close();
+			}
+			if(st != null) {
+				st.close();
+			}
+		}
 		return students;
 	}
-
-	public Collection<Student> getStudentsFromGroup(Group group, int year) {
-		Collection<Student> groupStudents = new TreeSet<Student>();
-		for(Student student : this.students) {
-			if(student.getGroupId() == group.getId() 
-					&& student.getEducationYear() == year
-			) {
-				groupStudents.add(student);
+	
+	public Collection<Student> getStudentsFromGroup(Group group, int year)
+			throws SQLException {
+		Collection<Student> students = new ArrayList<Student>();
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = con.prepareStatement(
+					"select student_id, firstName, patronymic, surName, sex, " +
+					"dateOfBirth, group_id, educationYear from students " + 
+					"where group_id=? and educationYear=? " +
+					"order by surName, firstName, patronymic"
+			);
+			st.setInt(1, group.getId());
+			st.setInt(2, year);
+			rs = st.executeQuery();
+			while(rs.next()) {
+				Student student = new Student(rs);
+				students.add(student);
+			}
+		} finally {
+			if(rs != null) {
+				rs.close();
+			}
+			if(st != null) {
+				st.close();
 			}
 		}
-		return groupStudents;
-	}
-
-	public void insertStudent(Student student) {
-		students.add(student);
-	}
-
-	public void updateStudent(Student newStudent) {
-		Student updatedStudent = null;
-		for(Student student : students) {
-			if(student.getId() == newStudent.getId()) {
-				updatedStudent = student;
-				break;
-			}
-		}
-		updatedStudent.setName(newStudent.getName());
-		updatedStudent.setPatronymic(newStudent.getPatronymic());
-		updatedStudent.setSurname(newStudent.getSurname());
-		updatedStudent.setSex(newStudent.getSex());
-		updatedStudent.setBirthDate(newStudent.getBirthDate());
-		updatedStudent.setGroupId(newStudent.getGroupId());
-		updatedStudent.setEducationYear(newStudent.getEducationYear());
-	}
-
-	public void deleteStudent(Student student) {
-		Student deletedStudent = null;
-		for(Student currentStudent : students) {
-			if(currentStudent.getId() == student.getId()) {
-				deletedStudent = currentStudent;
-				break;
-			}
-		}
-		students.remove(deletedStudent);
-	}
-
-	public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup,
-			int newYear) {
-		for(Student student : students) {
-			if(student.getGroupId() == oldGroup.getId()
-					&& student.getEducationYear() == oldYear) {
-				student.setGroupId(newGroup.getId());
-				student.setEducationYear(newYear);
-			}
-		}
-	}
-
-	public void removeStudentsFromGroup(Group group, int year) {
-		Collection<Student> tmpCollection = new TreeSet<Student>();
-		for(Student student : students) {
-			if(student.getGroupId() != group.getId() 
-					|| student.getEducationYear() != year) {
-				tmpCollection.add(student);
-			}
-		}
-		students = tmpCollection;
+		return students;
 	}
 	
-	public static void printString(Object object) {
-		System.out.println(object);
+	public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, 
+			int newYear) throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(
+					"update students set group_id=?, educationYear=? " +
+					"where group_id=? and educationYear=?"
+			);
+			ps.setInt(1, newGroup.getId());
+			ps.setInt(2, newYear);
+			ps.setInt(3, oldGroup.getId());
+			ps.setInt(4, oldYear);
+			ps.execute();
+		} finally {
+			if(ps != null) {
+				ps.close();
+			}
+		}
 	}
 	
-	public static void printString() {
-		System.out.println();
+	public void removeStudentsFromGroup(Group group, int year) 
+			throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(
+					"delete from students where group_id=? and educationYear=?"
+			);
+			ps.setInt(1, group.getId());
+			ps.setInt(2, year);
+			ps.execute();
+		} finally {
+			if(ps != null) {
+				ps.close();
+			}
+		}
+	}
+	
+	public void insertStudent(Student student) throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(
+					"insert into students (firstName, patronymic, surName, " +
+					"sex, dateOfBirth, group_id, educationYear) values " +
+					"(?, ?, ?, ?, ?, ?, ?)"
+			);
+			ps.setString( 1, student.getName() );
+			ps.setString( 2, student.getPatronymic() );
+			ps.setString( 3, student.getSurname() );
+			ps.setString( 4, new String(new char[]{student.getSex()}) );
+			ps.setDate(  5, new Date( student.getBirthDay().getTime() )  );
+			ps.setInt( 6, student.getGroupId() );
+			ps.setInt( 7, student.getEducationYear() );
+			ps.execute();
+		} finally {
+			if(ps != null) {
+				ps.close();
+			}
+		}
+	}
+	
+	public void updateStudent(Student student) throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(
+					"update students set " + 
+					"firstName=?, patronymic=?, surName=?, sex=?, " +
+					"dateOfBirth=?, group_id=?, educationYear=? " + 
+					"where student_id=?"
+			);
+			ps.setString( 1, student.getName() );
+			ps.setString( 2, student.getPatronymic() );
+			ps.setString( 3, student.getSurname() );
+			ps.setString( 4, new String(new char[]{student.getSex()}) );
+			ps.setDate(  5, new Date( student.getBirthDay().getTime() )  );
+			ps.setInt( 6, student.getGroupId() );
+			ps.setInt( 7, student.getEducationYear() );
+			ps.setInt( 8, student.getId() );
+			ps.execute();
+		} finally {
+			if(ps != null) {
+				ps.close();
+			}
+		}
+	}
+	
+	public void deleteStudent(Student student) throws SQLException {
+		PreparedStatement ps = null;
+		try {
+			ps = con.prepareStatement(
+					"delete from student where students_id=?"
+			);
+			ps.setInt( 1, student.getId() );
+			ps.execute();
+		} finally {
+			if(ps != null) {
+				ps.close();
+			}
+		}
 	}
 	
 }

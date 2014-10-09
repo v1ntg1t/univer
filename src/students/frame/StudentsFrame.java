@@ -1,7 +1,10 @@
 package students.frame;
 
 
+import java.util.Vector;
+
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
@@ -16,8 +19,6 @@ import javax.swing.SwingUtilities;
 
 import javax.swing.border.BevelBorder;
 
-import java.util.Vector;
-
 
 import students.logic.Group;
 import students.logic.ManagementSystem;
@@ -25,64 +26,60 @@ import students.logic.Student;
 
 
 public class StudentsFrame extends JFrame {
-	ManagementSystem ms = ManagementSystem.getInstance();
-	private JList groupsList;
-	private JList studentsList;
-	private JSpinner spYear;
+
+	ManagementSystem ms = null;
+	private JList groups;
+	private JList students;
+	private JSpinner year;
 	
-	public StudentsFrame() {
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(getTopPanel(), BorderLayout.NORTH);
-		getContentPane().add(getBottomPanel(ms), BorderLayout.CENTER);
-		setBounds(100, 100, 600, 400);
-	}
 	
-	private JPanel getTopPanel() {
+	public StudentsFrame() throws Exception {
+		Container root = getContentPane();
+		root.setLayout(new BorderLayout());
+
 		JPanel top = new JPanel();
 		top.setLayout(new FlowLayout(FlowLayout.LEFT));
 		top.add(new JLabel("Год обучения: "));
 		SpinnerModel sm = new SpinnerNumberModel(2006, 1900, 2100, 1);
-		spYear = new JSpinner(sm);
-		top.add(spYear);
-		return top;
-	}
-	
-	private JPanel getBottomPanel(ManagementSystem ms) {
-		JPanel bottom = new JPanel();
-		bottom.setLayout(new BorderLayout());
-		bottom.add(getLeftPanel(ms), BorderLayout.WEST);
-		bottom.add(getRightPanel(ms), BorderLayout.CENTER);
-		return bottom;
-	}
-	
-	private JPanel getLeftPanel(ManagementSystem ms) {
-		JPanel left = new JPanel();
-		left.setLayout(new BorderLayout());
-		left.setBorder(new BevelBorder(BevelBorder.RAISED));
-		left.add(new JLabel("Группы: "), BorderLayout.NORTH);
-		Vector<Group> groups = new Vector<Group>(ms.getGroups());
-		groupsList = new JList(groups);
-		left.add(new JScrollPane(groupsList), BorderLayout.CENTER);
-		return left;
-	}
-	
-	private JPanel getRightPanel(ManagementSystem ms) {
-		JPanel right = new JPanel();
-		right.setLayout(new BorderLayout());
-		right.setBorder(new BevelBorder(BevelBorder.RAISED));
-		right.add(new JLabel("Студенты: "), BorderLayout.NORTH);
-		Vector<Student> students = new Vector<Student>(ms.getAllStudents());
-		studentsList = new JList(students);
-		right.add(new JScrollPane(studentsList), BorderLayout.CENTER);
-		return right;
+		year = new JSpinner(sm);
+		top.add(year);
+		root.add(top, BorderLayout.NORTH);
+		
+		ms = ManagementSystem.getInstance();
+		JPanel bot = new JPanel();
+		bot.setLayout( new BorderLayout() );
+			JPanel left = new JPanel();
+			left.setLayout( new BorderLayout() );
+			left.setBorder( new BevelBorder(BevelBorder.RAISED) );
+			left.add( new JLabel("Группы: "), BorderLayout.NORTH );
+			Vector groups = new Vector<Group>( ms.getGroups() );
+			this.groups = new JList(groups);
+			left.add( new JScrollPane(this.groups), BorderLayout.CENTER );
+			bot.add(left, BorderLayout.WEST);
+
+			JPanel right = new JPanel();
+			right.setLayout( new BorderLayout() );
+			right.setBorder( new BevelBorder(BevelBorder.RAISED) );
+			right.add( new JLabel("Студенты: "), BorderLayout.NORTH );
+			Vector students = new Vector<Student>( ms.getAllStudents() );
+			this.students = new JList(students);
+			right.add( new JScrollPane(this.students), BorderLayout.CENTER );
+			bot.add(right, BorderLayout.CENTER);
+		root.add(bot, BorderLayout.CENTER);
+		
+		setBounds(100, 100, 600, 400);
 	}
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				StudentsFrame sf = new StudentsFrame();
-				sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
-				sf.setVisible(true);
+				try {
+					StudentsFrame sf = new StudentsFrame();
+					sf.setDefaultCloseOperation(EXIT_ON_CLOSE);
+					sf.setVisible(true);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

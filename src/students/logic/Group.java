@@ -1,18 +1,13 @@
 package students.logic;
 
+
 public class Group {
+	
 	private int id;
 	private String name;
 	private String curator;
 	private String speciality;
 	
-	public String getCurator() {
-		return curator;
-	}
-	
-	public void setCurator(String curator) {
-		this.curator = curator;
-	}
 	
 	public int getId() {
 		return id;
@@ -30,6 +25,14 @@ public class Group {
 		this.name = name;
 	}
 	
+	public String getCurator() {
+		return curator;
+	}
+	
+	public void setCurator(String curator) {
+		this.curator = curator;
+	}
+	
 	public String getSpeciality() {
 		return speciality;
 	}
@@ -37,8 +40,10 @@ public class Group {
 	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
+
 	
 	public String toString() {
-		return name;
+		return getName();
 	}
+
 }
