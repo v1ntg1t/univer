@@ -1,3 +1,1 @@
 Test application for java trip from SE to EE.
-
-Some tests with readme and other ...
