@@ -1,29 +1,63 @@
-<project name="univer" default="run">
+<project name="univer" default="all">
 	<property name="encoding" value="UTF-8"/>
 	<property name="src" value="src"/>
-	<property name="main" value="students.frame.StudentsFrame"/>
 	<property name="lib" value="lib"/>
+	<property name="jdbc" value="${lib}/mysql-connector-java-5.1.33-bin.jar"/>
+	<property name="servlet" value="${lib}/servlet-api.jar"/>
 	<property name="build" value="build"/>
 	<property name="classes" value="${build}/classes"/>
 	<property name="jars" value="${build}/jars"/>
 	<property name="jar" value="${jars}/univer.jar"/>
+	<property name="main" value="students.frame.StudentsFrame"/>
+	<property name="wars" value="${build}/wars"/>
+	<property name="war" value="${wars}/univer.war"/>
 	<target name="clean">
 		<delete dir="${build}"/>
 	</target>
-	<target name="make" depends="clean">
+	<target name="mkdir">
 		<mkdir dir="${classes}"/>
-		<javac srcdir="${src}" destdir="${classes}" encoding="${encoding}"/>
 	</target>
-	<target name="jar" depends="make">
+	<target name="makegui" depends="mkdir">
+		<javac srcdir="${src}" destdir="${classes}" encoding="${encoding}">
+			<include name="students/logic/*"/>
+			<include name="students/frame/*"/>
+		</javac>
+	</target>
+	<target name="jar" depends="makegui">
 		<mkdir dir="${jars}"/>		
-		<jar basedir="${classes}" destfile="${jar}">
+		<jar destfile="${jar}" basedir="${classes}" >
+			<include name="students/logic/*"/>
+			<include name="students/frame/*"/>
+			<zipfileset src="${jdbc}"/>
 			<manifest>
 				<attribute name="Main-Class" value="${main}"/>
 			</manifest>
-			<zipgroupfileset dir="${lib}"/>
 		</jar>
 	</target>
 	<target name="run" depends="jar">
 		<java jar="${jar}" fork="true"/>
+	</target>
+	<target name="makeweb" depends="mkdir">
+		<javac 	srcdir="${src}" 
+				classpath="${servlet}" 
+				destdir="${classes}" 
+				encoding="${encoding}" 
+		>
+			<include name="students/logic/*"/>
+			<include name="students/web/*"/>
+		</javac>
+	</target>
+	<target name="war" depends="makeweb">
+		<mkdir dir="${wars}"/>		
+		<war destfile="${war}" webxml="res/web.xml">
+			<classes dir="${classes}">
+				<include name="students/logic/*"/>
+				<include name="students/web/*"/>
+			</classes>
+			<lib file="${jdbc}"/>
+		</war>
+	</target>
+	<target name="all" depends="jar, war">
+		<echo>building all (jar, war)</echo>
 	</target>
 </project>
