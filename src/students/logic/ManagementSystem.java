@@ -92,7 +92,7 @@ public class ManagementSystem {
 		return students;
 	}
 	
-	public Collection<Student> getStudentsFromGroup(Group group, int year)
+	public Collection<Student> getStudents(Group group, int year)
 			throws SQLException {
 		Collection<Student> students = new ArrayList<Student>();
 		PreparedStatement st = null;
@@ -142,7 +142,7 @@ public class ManagementSystem {
 		}
 	}
 	
-	public void removeStudentsFromGroup(Group group, int year) 
+	public void removeStudents(Group group, int year) 
 			throws SQLException {
 		PreparedStatement ps = null;
 		try {
@@ -211,7 +211,7 @@ public class ManagementSystem {
 		PreparedStatement ps = null;
 		try {
 			ps = con.prepareStatement(
-					"delete from student where students_id=?"
+					"delete from students where student_id=?"
 			);
 			ps.setInt( 1, student.getId() );
 			ps.execute();
