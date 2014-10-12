@@ -1,0 +1,1 @@
+Test application for java trip from SE to EE.
