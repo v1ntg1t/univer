@@ -1,1 +1,0 @@
-java -cp classes;lib\mysql-connector-java-5.1.33-bin.jar students.frame.StudentsFrame

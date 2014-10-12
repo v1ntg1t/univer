@@ -1,0 +1,29 @@
+<project name="univer" default="run">
+	<property name="encoding" value="UTF-8"/>
+	<property name="src" value="src"/>
+	<property name="main" value="students.frame.StudentsFrame"/>
+	<property name="lib" value="lib"/>
+	<property name="build" value="build"/>
+	<property name="classes" value="${build}/classes"/>
+	<property name="jars" value="${build}/jars"/>
+	<property name="jar" value="${jars}/univer.jar"/>
+	<target name="clean">
+		<delete dir="${build}"/>
+	</target>
+	<target name="make" depends="clean">
+		<mkdir dir="${classes}"/>
+		<javac srcdir="${src}" destdir="${classes}" encoding="${encoding}"/>
+	</target>
+	<target name="jar" depends="make">
+		<mkdir dir="${jars}"/>		
+		<jar basedir="${classes}" destfile="${jar}">
+			<manifest>
+				<attribute name="Main-Class" value="${main}"/>
+			</manifest>
+			<zipgroupfileset dir="${lib}"/>
+		</jar>
+	</target>
+	<target name="run" depends="jar">
+		<java jar="${jar}" fork="true"/>
+	</target>
+</project>
