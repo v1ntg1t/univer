@@ -21,12 +21,12 @@ public class TestJDBCServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = response.getWriter();
-		out.println("<b>Список групп</b>");
-		out.println("<table border=1>");
 		try {
 			List<Group> groups = ManagementSystem.getInstance().getGroups();
+			request.setAttribute("groups", groups);
+			getServletContext().getRequestDispatcher("/testjdbc.jsp").forward(
+					request, response);
+/*			
 			for(Group group : groups) {
 				out.print("<tr>");
 				out.print("<td>" + group.getId() + "</td>");
@@ -35,10 +35,10 @@ public class TestJDBCServlet extends HttpServlet {
 				out.print("<td>" + group.getSpeciality() + "</td>");
 				out.print("</tr>");
 			}
+*/			
 		} catch(Exception e) {
 			throw new ServletException(e);
 		}
-		out.println("</table>");
 	}
 
 }

@@ -49,7 +49,8 @@
 	</target>
 	<target name="war" depends="makeweb">
 		<mkdir dir="${wars}"/>		
-		<war destfile="${war}" webxml="res/web.xml">
+		<war destfile="${war}" webxml="res/web/WEB-INF/web.xml">
+			<fileset dir="res/web"/>
 			<classes dir="${classes}">
 				<include name="students/logic/*"/>
 				<include name="students/web/*"/>

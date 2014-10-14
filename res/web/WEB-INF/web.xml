@@ -9,11 +9,11 @@
 		<url-pattern>/hello</url-pattern>
 	</servlet-mapping>
 	<servlet>
-		<servlet-name>jdbctest</servlet-name>
+		<servlet-name>testjdbc</servlet-name>
 		<servlet-class>students.web.TestJDBCServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>jdbctest</servlet-name>
-		<url-pattern>/jdbctest</url-pattern>
+		<servlet-name>testjdbc</servlet-name>
+		<url-pattern>/testjdbc</url-pattern>
 	</servlet-mapping>
 </web-app>
