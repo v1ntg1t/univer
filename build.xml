@@ -2,8 +2,9 @@
 	<property name="encoding" value="UTF-8"/>
 	<property name="src" value="src"/>
 	<property name="lib" value="lib"/>
-	<property name="jdbc" value="${lib}/mysql-connector-java-5.1.33-bin.jar"/>
-	<property name="servlet" value="${lib}/servlet-api.jar"/>
+	<property name="jdbc" value="mysql-connector-java-5.1.33-bin.jar"/>
+	<property name="servlet" value="${lib}/servlet-2.5-api.jar"/>
+	<property name="jstl" value="jstl-1.2.jar"/>
 	<property name="build" value="build"/>
 	<property name="classes" value="${build}/classes"/>
 	<property name="jars" value="${build}/jars"/>
@@ -11,6 +12,7 @@
 	<property name="main" value="students.frame.StudentsFrame"/>
 	<property name="wars" value="${build}/wars"/>
 	<property name="war" value="${wars}/univer.war"/>
+	<property name="tomcat.service.name" value="Tomcat6"/>
 	<target name="clean">
 		<delete dir="${build}"/>
 	</target>
@@ -28,7 +30,7 @@
 		<jar destfile="${jar}" basedir="${classes}" >
 			<include name="students/logic/*"/>
 			<include name="students/frame/*"/>
-			<zipfileset src="${jdbc}"/>
+			<zipfileset src="${lib}/${jdbc}"/>
 			<manifest>
 				<attribute name="Main-Class" value="${main}"/>
 			</manifest>
@@ -55,10 +57,33 @@
 				<include name="students/logic/*"/>
 				<include name="students/web/*"/>
 			</classes>
-			<lib file="${jdbc}"/>
+			<lib dir="${lib}">
+				<include name="${jdbc}"/>
+				<include name="${jstl}"/>
+			</lib>
 		</war>
 	</target>
-	<target name="all" depends="jar, war">
-		<echo>building all (jar, war)</echo>
+	<property name="url" value="http://localhost:8080/manager"/>
+	<target name="undeploy">
+		<undeploy
+				url="${url}"
+				username="admin"
+				password="admin"
+				path="/univer"
+		/>
 	</target>
+	<target name="deploy" depends="war, undeploy">
+		<deploy
+				url="${url}"
+				username="admin"
+				password="admin"
+				path="/univer"
+				war="file:${war}"
+		/>
+	</target>
+	<target name="all" depends="deploy">
+	</target>
+	
+	<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask"/>
+	<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask"/>
 </project>

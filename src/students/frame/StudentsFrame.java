@@ -58,7 +58,7 @@ public class StudentsFrame extends JFrame
 
 
 	ManagementSystem managementSystem = null;
-	private JList<Group> groups;
+	private JList groups;
 	private JTable students;
 	private JSpinner yearSpinner;
 	
@@ -85,7 +85,7 @@ public class StudentsFrame extends JFrame
 	private void setGroups() throws SQLException {
 		List<Group> groups = managementSystem.getGroups();
 		Vector<Group> groupsVector = new Vector<Group>(groups);
-		this.groups = new JList<Group>(groupsVector);
+		this.groups = new JList(groupsVector);
 		this.groups.setSelectedIndex(0);
 		this.groups.addListSelectionListener(this);
 	}
@@ -239,7 +239,7 @@ public class StudentsFrame extends JFrame
 		Thread t = new Thread() {
 			public void run() {
 				if(students != null) {
-					Group group = groups.getSelectedValue();
+					Group group = (Group)groups.getSelectedValue();
 					SpinnerNumberModel model = null;
 					model = (SpinnerNumberModel)yearSpinner.getModel();
 					int year = model.getNumber().intValue();
@@ -264,7 +264,7 @@ public class StudentsFrame extends JFrame
 	private void clearGroup() {
 		Thread t = new Thread() {
 			public void run() {
-				Group group = groups.getSelectedValue();
+				Group group = (Group)groups.getSelectedValue();
 				if(group != null) {
 					if(		JOptionPane.showConfirmDialog(
 									StudentsFrame.this,

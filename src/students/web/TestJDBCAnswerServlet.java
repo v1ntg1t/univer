@@ -4,7 +4,6 @@ package students.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,28 +17,22 @@ import students.logic.Group;
 import students.logic.ManagementSystem;
 
 
-public class TestJDBCServlet extends HttpServlet {
+public class TestJDBCAnswerServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
 		try {
-			List<Group> groups = ManagementSystem.getInstance().getGroups();
-			request.setAttribute("groups", groups);
-
-			List<String> strings = new ArrayList<String>();
-			for(int i = 0; i < 5; i++) {
-				strings.add("string " + i);
-			}
-			request.setAttribute("strings", strings);
-
-			getServletContext().getRequestDispatcher("/testjdbc.jsp").forward(
-//			getServletContext().getRequestDispatcher("/testjdbcanswer").forward(
-					request, response);
-
-					
+			List<Group> groups = (List<Group>)request.getAttribute("groups");
 /*			
+			request.setAttribute("groups", groups);
+			getServletContext().getRequestDispatcher("/testjdbc.jsp").forward(
+					request, response);
+*/					
+					
+			
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out = response.getWriter();
+			out.println("<h1>answer from servlet</h1>");
 			out.println("<table border=1>");
 			for(Group group : groups) {
 				out.print("<tr>");
@@ -50,7 +43,7 @@ public class TestJDBCServlet extends HttpServlet {
 				out.print("</tr>");
 			}
 			out.println("</table>");
-*/			
+			
 		} catch(Exception e) {
 			throw new ServletException(e);
 		}

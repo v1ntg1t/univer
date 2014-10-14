@@ -16,4 +16,12 @@
 		<servlet-name>testjdbc</servlet-name>
 		<url-pattern>/testjdbc</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>testjdbcanswer</servlet-name>
+		<servlet-class>students.web.TestJDBCAnswerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>testjdbcanswer</servlet-name>
+		<url-pattern>/testjdbcanswer</url-pattern>
+	</servlet-mapping>
 </web-app>
