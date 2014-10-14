@@ -17,32 +17,18 @@
 			for(String str : stringList) {
 				%><tr><td><c:out value="founded string"/></td></tr><%
 			}
-			request.setAttribute("strings", stringList);
-			pageContext.setAttribute("pagestrings", stringList);
+//			request.setAttribute("strings", stringList);
+//			pageContext.setAttribute("pagestrings", stringList);
 		%>
 		<tr><td><c:out value="after native java"/></td></tr>
 
-		<c:forEach var="item" items="pageScope.pagestrings">
-			<tr><td>string</td></tr>
+		<c:forEach var="item" items="requestScope.${strings}">
+			<tr><td><c:out value="${item}"/></td></tr>
 		</c:forEach>
 		<c:forEach var="item" items="${requestScope.groups}">
 			<tr><td>group</td></tr>
 		</c:forEach>
-		<c:forEach var="item" items="${pageScope.pagestrings}">
-			<tr><td>string</td></tr>
-		</c:forEach>
-
-		<c:forEach var="item" items="${requestScope.groups}">
-			<tr><td>group</td></tr>
-		</c:forEach>
-
-		<c:forEach var="item" items="pagestrings">
-			<tr><td>string</td></tr>
-		</c:forEach>
-		<c:forEach var="item" items="${requestScope.groups}">
-			<tr><td>group</td></tr>
-		</c:forEach>
-		<c:forEach var="item" items="${pagestrings}">
+		<c:forEach var="item" items="requestScope.pagestrings">
 			<tr><td>string</td></tr>
 		</c:forEach>
 
