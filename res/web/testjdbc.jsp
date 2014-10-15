@@ -1,46 +1,24 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@page import="java.util.List" %>
 <%@page import="java.util.ArrayList" %>
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>Test Sample</title>
 	</head>
 	<body>
-		<h1>answer from jsp</h1>
-		<h1>"<c:out value="out by jstl core"/>"</h1>
-		<table>
-		<tr><td><c:out value="before native java"/></td></tr>
-		<%
-			List<String> stringList = (List<String>)request.getAttribute("strings");
-			for(String str : stringList) {
-				%><tr><td><c:out value="founded string"/></td></tr><%
-			}
-//			request.setAttribute("strings", stringList);
-//			pageContext.setAttribute("pagestrings", stringList);
-		%>
-		<tr><td><c:out value="after native java"/></td></tr>
-
-		<c:forEach var="item" items="requestScope.${strings}">
-			<tr><td><c:out value="${item}"/></td></tr>
-		</c:forEach>
-		<c:forEach var="item" items="${requestScope.groups}">
-			<tr><td>group</td></tr>
-		</c:forEach>
-		<c:forEach var="item" items="requestScope.pagestrings">
-			<tr><td>string</td></tr>
-		</c:forEach>
-
-		<tr><td><c:out value="before native java"/></td></tr>
-		<%
-			stringList = (List<String>)request.getAttribute("strings");
-			for(String str : stringList) {
-				%><tr><td><c:out value="founded string"/></td></tr><%
-			}
-		%>
-		<tr><td><c:out value="after native java"/></td></tr>
-
+		answer from jsp: "<c:out value="out by jstl core"/>"
+		<table border=1>
+			<c:forEach var="item" items="${groups}">
+				<tr>
+					<td>${item.id}</td>
+					<td>${item.name}</td>
+					<td>${item.curator}</td>
+					<td>${item.speciality}</td>
+				</tr>
+			</c:forEach>
 		</table>
 	</body>
 </html>
