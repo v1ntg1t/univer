@@ -3,8 +3,9 @@
 	<property name="src" value="src"/>
 	<property name="lib" value="lib"/>
 	<property name="jdbc" value="mysql-connector-java-5.1.33-bin.jar"/>
-	<property name="servlet" value="${lib}/servlet-2.5-api.jar"/>
+	<property name="servlet" value="servlet-2.5-api.jar"/>
 	<property name="jstl" value="jstl-1.2.jar"/>
+	<property name="jsp" value="jsp-api.jar"/>
 	<property name="build" value="build"/>
 	<property name="classes" value="${build}/classes"/>
 	<property name="jars" value="${build}/jars"/>
@@ -39,14 +40,21 @@
 	<target name="run" depends="jar">
 		<java jar="${jar}" fork="true"/>
 	</target>
+	<path id="classpath.web">
+		<fileset dir="${lib}">
+			<include name="${servlet}"/>
+			<include name="${jsp}"/>
+		</fileset>
+	</path>
 	<target name="makeweb" depends="mkdir">
 		<javac 	srcdir="${src}" 
-				classpath="${servlet}" 
+				classpathref="classpath.web" 
 				destdir="${classes}" 
 				encoding="${encoding}" 
 		>
 			<include name="students/logic/*"/>
 			<include name="students/web/*"/>
+			<include name="students/web/tag/*"/>
 		</javac>
 	</target>
 	<target name="war" depends="makeweb">
@@ -56,6 +64,7 @@
 			<classes dir="${classes}">
 				<include name="students/logic/*"/>
 				<include name="students/web/*"/>
+				<include name="students/web/tag/*"/>
 			</classes>
 			<lib dir="${lib}">
 				<include name="${jdbc}"/>

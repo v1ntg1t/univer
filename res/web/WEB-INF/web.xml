@@ -34,4 +34,9 @@
 		<servlet-name>testjdbcanswer</servlet-name>
 		<url-pattern>/testjdbcanswer</url-pattern>
 	</servlet-mapping>
+	
+	<taglib>
+		<taglib-uri>http://www.someurl.ru</taglib-uri>
+		<taglib-location>/WEB-INF/hello.tld</taglib-location>
+	</taglib>
 </web-app>

@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="/WEB-INF/hello.tld" prefix="jstlpg" %>
 <html>
 	<head>
 		<title>Test Sample</title>
@@ -11,5 +13,8 @@
 				%>test with name '<%=name%>'<%
 			}
 		%>
+		<br/>
+		Test from custom tag library:
+		<jstlpg:hello name='<%=request.getParameter("name")%>'/>
 	</body>
 </html>
