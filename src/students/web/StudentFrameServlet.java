@@ -2,6 +2,7 @@ package students.web;
  
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.sql.SQLException;
 
@@ -46,6 +47,7 @@ public class StudentFrameServlet extends HttpServlet {
 
 	public void processRequest(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
 		ManagementSystem ms = ManagementSystem.getInstance();
 				
 		String sId = req.getParameter("id");

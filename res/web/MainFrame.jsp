@@ -3,8 +3,6 @@
 <html>
 	<head>
 		<title>Список студентов</title>
-		<meta charset="utf-8" />
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	</head>
 	<body>
 		<form action='<c:url value="/main"/>' method='POST'>

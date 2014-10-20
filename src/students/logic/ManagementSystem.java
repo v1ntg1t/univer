@@ -65,9 +65,6 @@ public class ManagementSystem {
 				Context ctx = new InitialContext();
 				instance.dataSource = (DataSource) ctx.lookup(STUDENTS_DS);
 				con = dataSource.getConnection();
-				Statement st = con.createStatement();
-				st.executeUpdate("SET NAMES utf8");
-				st.close();
 			} catch (NamingException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
