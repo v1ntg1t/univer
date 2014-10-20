@@ -7,6 +7,14 @@ public class Group {
 	private String name;
 	private String curator;
 	private String speciality;
+
+
+	public Group() {}
+
+	public Group(int id) {
+		this();
+		setId(id);
+	}
 	
 	
 	public int getId() {
